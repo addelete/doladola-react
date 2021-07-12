@@ -1,0 +1,81 @@
+.GameS4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ant-avatar {
+  box-shadow: 0 0 1px 2px rgba(0,0,0,0.1);
+  border: 1px solid #ffffff;
+}
+
+.players {
+  display: flex;
+  padding: 16px;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 640px;
+  height: 120px;
+  .self {
+
+  }
+  .others {
+    display: flex;
+  }
+  .player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &+.player {
+      margin-left: 10px;
+    }
+    .status {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  }
+  
+  
+}
+
+.boardGrids {
+  padding: 20px;
+
+  .row {
+    display: flex;
+
+    &+.row {
+      margin-top: 1px;
+    }
+
+    .grid {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #efefef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &.nextStepCanMoved {
+        background: #4caf50;
+      }
+      &.isBaned {
+        background: #dadada;
+      }
+      &.isMyPos {
+        background: #ffeb3b;
+      }
+
+      &+.grid {
+        margin-left: 1px;
+      }
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  .ant-btn + .ant-btn {
+    margin-left: 16px;
+  }
+}
