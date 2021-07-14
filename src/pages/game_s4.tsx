@@ -81,6 +81,7 @@ type GameState = {
 type GameVars = {
   voteRestartModal: any,
   voteNextStepModal: any,
+  gameOverModal: any,
 }
 
 /**
@@ -140,6 +141,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
   const vars = useSingleInstanceVar<GameVars>({
     voteRestartModal: undefined,
     voteNextStepModal: undefined,
+    gameOverModal: undefined,
   })
 
   useEffect(() => {
@@ -365,7 +367,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
     setState({ isGameOver: true })
     if (result === 'normal') {
       if (winner && winner === state.account._id) {
-        Modal.confirm({
+        vars.gameOverModal = Modal.confirm({
           title: '胜',
           content: '大风起兮云飞扬，威加海内兮归故乡，安得猛士兮守四方！',
           onOk: clearGameAndGoHome,
@@ -374,7 +376,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
           cancelText: '重开游戏',
         })
       } else {
-        Modal.confirm({
+        vars.gameOverModal = Modal.confirm({
           title: '负',
           content: '力拔山兮气盖世，时不利兮骓不逝。骓不逝兮可奈何，虞兮虞兮奈若何！',
           onOk: clearGameAndGoHome,
@@ -384,7 +386,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
         })
       }
     } else if (result === 'draw') {
-      Modal.confirm({
+      vars.gameOverModal = Modal.confirm({
         title: '平',
         content: '天下英雄，唯使君与操耳。',
         onCancel: VoteRestart,
@@ -429,6 +431,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
       myPos: undefined,
       myNextPos: undefined,
     })
+    vars.gameOverModal && vars.gameOverModal.destroy()
   }
 
 
