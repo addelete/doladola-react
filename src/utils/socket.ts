@@ -22,7 +22,7 @@ socket.on('login success', (data: any) => {
   token && cache.setItem('token', token);
   account && cache.setItem('account', account);
   if (/^\/auth\//.test(window.location.pathname)) {
-    const { fromUrlBase64 } = qs.parse(history.location.search.slice(1));
+    const { fromUrl: fromUrlBase64 } = qs.parse(history.location.search.slice(1));
     const fromUrl = fromUrlBase64 ? base64url.decode(fromUrlBase64.toString()) : '/';
     history.replace(fromUrl);
   }

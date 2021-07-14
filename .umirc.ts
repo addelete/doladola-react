@@ -6,9 +6,7 @@ export default defineConfig({
   },
   define: {
     APP_SIGN: 'doladola',
-    SOCKET_URI: process.env.NODE_ENV === 'development' ?
-      'http://127.0.0.1:10996' :
-      'https://doladola-socket.humwo.com',
+    SOCKET_URI: 'http://127.0.0.1:10996',
   },
   fastRefresh: {},
   hash: true,

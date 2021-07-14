@@ -1,7 +1,12 @@
 .GameS4 {
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
   align-items: center;
+  justify-content: center;
+  &.vv {
+    flex-direction: column;
+  }
 }
 
 .ant-avatar {
@@ -9,41 +14,98 @@
   border: 1px solid #ffffff;
 }
 
+.gameStatus {
+  display: flex;
+  background: #fff8f3;
+  padding: 20px;
+  box-sizing: content-box;
+  border-radius: 8px;
+  color: #ff9800;
+  .currentStepNum {
+    font-weight: bolder;
+  }
+  &.hv {
+    flex-direction: column;
+    height: calc(var(--size) - 40px);
+    width: 1em;
+    line-height: 1.2em;
+    text-align: center;
+    
+    .currentStepNum {
+      height: 80px;
+    }
+  }
+  &.vv {
+    width: calc(var(--size) - 40px);
+    .currentStepNum {
+      width: 80px;
+    }
+  }
+  
+}
+
 .players {
   display: flex;
-  padding: 16px;
   justify-content: space-between;
-  width: 100%;
-  max-width: 640px;
-  height: 120px;
-  .self {
-
+  &.hv {
+    flex-direction: column;
+    height: var(--size);
+    padding: 16px 0;
+    margin-left: 20px;
   }
+  &.vv {
+    width: var(--size);
+    padding: 0 16px;
+    margin-top: 20px;
+  }
+
   .others {
     display: flex;
+    &.hv {
+      flex-direction: column;
+    }
   }
   .player {
     display: flex;
     flex-direction: column;
     align-items: center;
-    &+.player {
-      margin-left: 10px;
-    }
-    .status {
+    .moveStatus {
       font-size: 12px;
       margin-top: 5px;
+      color: #ffa200;
+      &.isMoved {
+        color: #4caf50;
+      }
     }
+  }
+
+  &.vv .player + .player {
+    margin-left: 10px;
+  }
+  &.hv .player + .player {
+    margin-top: 10px;
   }
   
   
 }
 
-.boardGrids {
-  padding: 20px;
+.boardWrap {
+  width: var(--size);
+  height: var(--size);
+  overflow: hidden;
+  &.hv {
+    margin-left: 20px;
+  }
+  &.vv {
+    margin-top: 20px;
+  }
+}
 
+.boardGrids {
+  transform-origin: 0 0;
   .row {
     display: flex;
-
+    
     &+.row {
       margin-top: 1px;
     }
@@ -55,7 +117,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-
+      flex-shrink: 0;
       &.nextStepCanMoved {
         background: #4caf50;
       }
@@ -75,7 +137,42 @@
 
 .buttons {
   display: flex;
-  .ant-btn + .ant-btn {
-    margin-left: 16px;
+  justify-content: flex-start;
+ 
+  &.hv {
+    padding: 16px 0;
+    margin-left: 20px;
+    flex-direction: column;
+    height: var(--size);
+    .ant-btn + .ant-btn {
+      margin-top: 16px;
+      &.prevSpace {
+        margin-top: auto;
+      }
+    }
+    
+  }
+  &.vv {
+    width: var(--size);
+    padding: 0 16px;
+    margin-top: 20px;
+    .ant-btn + .ant-btn {
+      margin-left: 16px;
+      &.prevSpace {
+        margin-left: auto;
+      }
+    }
+    
+  }
+}
+
+.rules {
+  list-style: decimal;
+}
+
+.isHView {
+  flex-direction: row;
+  .players {
+
   }
 }

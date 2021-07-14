@@ -162,7 +162,6 @@ const IndexPage = () => {
   function handleCustomGame(gameType: string) {
     cache.setItem('gameType', gameType)
     socket.emit('custom game', { gameType });
-    setState({ customGameModalVisible: false })
   }
 
 
