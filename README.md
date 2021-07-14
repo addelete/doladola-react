@@ -1,6 +1,7 @@
 # doladola web client by react
 
-![server](https://github.com/addelete/doladola-socket)
+[server](https://github.com/addelete/doladola-socket)
+[web](https://github.com/addelete/doladola-react)
 
 ## dev
 ```
