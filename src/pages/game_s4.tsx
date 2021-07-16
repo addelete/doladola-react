@@ -66,6 +66,7 @@ type GameState = {
   boardWidth: number,
   boardHeight: number,
   nextStepCanMovedGrids: Position[],
+  myselfMoved: boolean,
   myAvatarPxPos?: Position,
   playersInfoMap: {
     [key: string]: UserType
@@ -130,6 +131,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
     boardWidth: 0,
     boardHeight: 0,
     nextStepCanMovedGrids: [], // 下一步可走的地砖，要在棋盘上亮起来
+    myselfMoved: false,
     myAvatarPxPos: undefined,
     playersInfoMap: {},
     playersStatusMap: {},
@@ -262,17 +264,17 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
     if (state.currentStepNum === 0) {
       canNextStep = false
     }
-    if (state.playersStatusMap[state.account?._id]?.move) {
+    if (state.myselfMoved) {
       canNextStep = false
     }
     setState({ canNextStep });
-  }, [state.account, state.currentStepNum, state.playersStatusMap])
+  }, [state.account, state.currentStepNum, state.playersStatusMap, state.myselfMoved])
 
   /**
    * 移动冲突
    */
   function handleClashedMoving() {
-    message.warning({ content: '移动失败，请重新移动' })
+    message.warning({ content: '格子已被占据，移动失败，请重新移动' })
     const playersStatusMap = update(state.playersStatusMap, {
       [state.account._id]: {
         move: { $set: false },
@@ -443,6 +445,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
     if (currentStepNum !== state.currentStepNum) {
       setState({
         myNextPos: undefined,
+        myselfMoved: false,
       })
     }
     setState({
@@ -560,13 +563,8 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
    */
   function submitMove() {
     if (state.myNextPos) {
-      socket.emit('submit move', { oldPos: state.myPos, movePos: state.myNextPos, stepNum: state.currentStepNum });
-      const playersStatusMap = update(state.playersStatusMap, {
-        [state.account?._id]: {
-          move: { $set: true },
-        }
-      })
-      setState({ playersStatusMap });
+      socket.emit('submit move', { oldPos: state.myPos, newPos: state.myNextPos, stepNum: state.currentStepNum });
+      setState({ myselfMoved: true });
     }
   }
 
@@ -674,8 +672,8 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
             size={48}
           />
           {state.currentStepNum > 0 && (
-            <div className={classnames('moveStatus', { 'isMoved': state.playersStatusMap[state.account?._id]?.move })}>
-              {state.playersStatusMap[state.account?._id]?.move ? '已走' : '未走'}
+            <div className={classnames('moveStatus', { 'isMoved': state.myselfMoved })}>
+              {state.myselfMoved ? '已走' : '未走'}
             </div>
           )}
         </div>
