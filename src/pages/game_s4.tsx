@@ -151,7 +151,9 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
     const gameCols = allGameColsMap[gameType]
     const boardWidth = (gameCols) * 41 - 1
     setState({
-      boardScale: SIZE / boardWidth
+      boardScale: SIZE / boardWidth,
+      gameSizeX: gameCols,
+      gameSizeY: gameCols,
     })
   }, [location])
 
@@ -264,7 +266,7 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
     if (state.currentStepNum === 0) {
       canNextStep = false
     }
-    if (state.myselfMoved) {
+    if (state.playersStatusMap && state.account && (state.myselfMoved || (state.playersStatusMap[state.account._id]?.move))) {
       canNextStep = false
     }
     setState({ canNextStep });
@@ -282,6 +284,13 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
     })
     setState({ playersStatusMap, myNextPos: undefined, });
   }
+
+  // 开局，如果是房主，提示点击开始
+  useEffect(() => {
+    if(state.customGameMaster && state.customGameMaster === state.account?._id && state.currentStepNum === 0) {
+      message.info('你是房主，请在准备好之后点击开始')
+    }
+  }, [state.customGameMaster, state.account, state.currentStepNum])
 
   /**
   * 其他人发起拨轮投票
@@ -671,9 +680,9 @@ const GameS4: React.FC<IRouteComponentProps> = ({ location }) => {
             src={state.account?.avatar}
             size={48}
           />
-          {state.currentStepNum > 0 && (
+          {state.currentStepNum > 0 && state.account && state.playersStatusMap && (
             <div className={classnames('moveStatus', { 'isMoved': state.myselfMoved })}>
-              {state.myselfMoved ? '已走' : '未走'}
+              {(state.myselfMoved || state.playersStatusMap[state.account._id]?.move) ? '已走' : '未走'}
             </div>
           )}
         </div>
