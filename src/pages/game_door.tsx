@@ -35,18 +35,24 @@ const GameDoor: React.FC<IRouteComponentProps> = ({ location }) => {
     gameType,
     canJoin,
   }: GameBaseInfoSuccessMsg) {
-    if (canJoin) {
-      cache.setItem('gameStatus', 'gaming');
-      cache.setItem('gameType', gameType);
-      cache.setItem('gameRoomId', gameRoomId);
-      history.replace(`/game_${gameType?.slice(0, 2)}`)
-    } else {
-      message.success({
-        content: '加入失败，原因可能是游戏已经开始'
-      })
-      setTimeout(() => history.replace('/'), 1000)
+    const gameStatus = cache.getItem('gameStatus');
+    const oldGameRoomId = cache.getItem('gameRoomId');
+    if (gameStatus === 'gaming' && oldGameRoomId !== gameRoomId) {
+      socket.emit('quit game');
     }
-
+    setTimeout(() => {
+      if (canJoin) {
+        cache.setItem('gameStatus', 'gaming');
+        cache.setItem('gameType', gameType);
+        cache.setItem('gameRoomId', gameRoomId);
+        history.replace(`/game_${gameType?.slice(0, 2)}`)
+      } else {
+        message.success({
+          content: '加入失败，原因可能是游戏已经开始'
+        })
+        setTimeout(() => history.replace('/'), 1000)
+      }
+    }, 500)
   }
 
   return <div className="GameDoorPage">
